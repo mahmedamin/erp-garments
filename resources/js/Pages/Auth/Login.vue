@@ -1,44 +1,84 @@
 <template>
-    <jet-authentication-card>
-        <template #logo>
-            <jet-authentication-card-logo />
-        </template>
-
-        <jet-validation-errors class="mb-4" />
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
+    <!-- HK Wrapper -->
+    <div class="hk-wrapper">
+        <!-- Preloader -->
+        <div class="preloader-it">
+            <div class="loader-pendulums"></div>
         </div>
+        <!-- /Preloader -->
 
-        <form @submit.prevent="submit">
-            <div>
-                <jet-label for="email" value="Email" />
-                <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autofocus />
+        <!-- Main Content -->
+        <div class="hk-pg-wrapper hk-auth-wrapper">
+            <header class="d-flex justify-content-between align-items-center">
+                <a class="d-flex auth-brand" href="#">
+                    <img class="brand-img w-245p" src="assets/dist/img/logo-dark.png" alt="brand" />
+                </a>
+                <div class="btn-group btn-group-sm">
+                    <a href="#" class="btn btn-outline-secondary">Help</a>
+                    <a href="#" class="btn btn-outline-secondary">About Us</a>
+                </div>
+            </header>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-5 pa-0">
+                        <div id="owl_demo_1" class="owl-carousel dots-on-item owl-theme">
+                            <div class="fadeOut item auth-cover-img overlay-wrap" style="background-image:url(assets/dist/img/login1.jpg);">
+                                <div class="auth-cover-info py-xl-0 pt-100 pb-50">
+                                    <div class="auth-cover-content text-center w-xxl-75 w-sm-90 w-xs-100">
+                                        <h1 class="display-3 text-white mb-20">Welcome to Graments ERP Solution.</h1>
+                                        <p class="text-white">The purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.) that doesn't distract from the layout. Again during the 90s as desktop publishers bundled the text with their software.</p>
+                                    </div>
+                                </div>
+                                <div class="bg-overlay bg-trans-dark-50"></div>
+                            </div>
+                            <div class="fadeOut item auth-cover-img overlay-wrap" style="background-image:url(assets/dist/img/login2.jpg);">
+                                <div class="auth-cover-info py-xl-0 pt-100 pb-50">
+                                    <div class="auth-cover-content text-center w-xxl-75 w-sm-90 w-xs-100">
+                                        <h1 class="display-3 text-white mb-20">Experience matters for good applications.</h1>
+                                        <p class="text-white">The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.</p>
+                                    </div>
+                                </div>
+                                <div class="bg-overlay bg-trans-dark-50"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-7 pa-0">
+                        <jet-validation-errors class="mb-4" />
+                        <div class="auth-form-wrap py-xl-0 py-50">
+                            <div class="auth-form w-xxl-55 w-xl-75 w-sm-90 w-xs-100">
+                                <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+                                    {{ status }}
+                                </div>
+                                <form @submit.prevent="submit">
+                                    <h1 class="display-4 mb-10">Welcome Back :)</h1>
+                                    <p class="mb-30">Sign in to your account and enjoy unlimited perks.</p>
+                                    <div class="form-group">
+                                        <input v-model="form.email" placeholder="Email" type="email" class="form-control" required autofocus>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input v-model="form.password" placeholder="Password" type="password" required autocomplete="current-password" class="form-control">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><span class="feather-icon"><i data-feather="eye-off"></i></span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="custom-control custom-checkbox mb-25">
+                                        <input name="remember" v-model="form.remember" class="custom-control-input" id="same-address" type="checkbox" checked>
+                                        <label class="custom-control-label font-14" for="same-address">Keep me logged in</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-block" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">Login</button>
+                                    <p class="font-14 text-center mt-15">Develop By Tagsncode</p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+        <!-- /Main Content -->
 
-            <div class="mt-4">
-                <jet-label for="password" value="Password" />
-                <jet-input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="current-password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <jet-checkbox name="remember" v-model="form.remember" />
-                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <inertia-link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                    Forgot your password?
-                </inertia-link>
-
-                <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Login
-                </jet-button>
-            </div>
-        </form>
-    </jet-authentication-card>
+    </div>
 </template>
 
 <script>
@@ -49,6 +89,8 @@
     import JetCheckbox from '@/Jetstream/Checkbox'
     import JetLabel from '@/Jetstream/Label'
     import JetValidationErrors from '@/Jetstream/ValidationErrors'
+    import {init} from "../../../../public/assets/dist/js/init"
+    import {loginInit} from "../../../../public/assets/dist/js/login-data"
 
     export default {
         components: {
@@ -74,6 +116,11 @@
                     remember: false
                 })
             }
+        },
+
+        mounted() {
+            init()
+            loginInit()
         },
 
         methods: {
