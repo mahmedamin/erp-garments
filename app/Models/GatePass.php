@@ -9,6 +9,8 @@ class GatePass extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function details()
     {
         return $this->hasMany(GatePassDetail::class);

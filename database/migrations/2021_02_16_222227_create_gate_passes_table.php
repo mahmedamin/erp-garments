@@ -22,7 +22,7 @@ class CreateGatePassesTable extends Migration
             $table->string('purpose')->nullable();
             $table->decimal('amount',11,2)->nullable();
             $table->string('driver_name', 50)->nullable();
-            $table->string('vehical_number', 50)->nullable();
+            $table->string('vehicle_number', 50)->nullable();
             $table->timestamps();
         });
     }

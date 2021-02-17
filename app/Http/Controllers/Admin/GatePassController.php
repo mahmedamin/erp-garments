@@ -7,7 +7,9 @@ use App\Models\Department;
 use App\Models\GatePass;
 use App\Models\GatePassDetail;
 use App\Models\Unit;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class GatePassController extends Controller
@@ -42,11 +44,51 @@ class GatePassController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'department_id' => 'required',
+            'amount' => 'numeric',
+            'confirmation' => 'accepted',
+            'details.*.type' => 'required',
+            'details.*.unit_id' => 'required',
+            'details.*.quantity' => 'required|numeric|min:1',
+            'details.*.is_returnable' => 'required',
+        ]);
+
+        $gatePass = GatePass::create($request->only([
+            'name',
+            'style',
+            'contact',
+            'department_id',
+            'purpose',
+            'amount',
+            'driver_name',
+            'vehicle_number',
+        ]));
+
+        $details = [];
+        foreach ($request->details as $detail) {
+            $details[] = [
+                'gate_pass_id' => $gatePass->id,
+                'description' => $detail['description'],
+                'type' => $detail['type'],
+                'quantity' => $detail['quantity'],
+                'unit_id' => $detail['unit_id'],
+                'is_returnable' => $detail['is_returnable'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ];
+        }
+
+        GatePassDetail::insert($details);
+
+        return Redirect::route('admin.gate-pass.index');
+
+
     }
 
     /**

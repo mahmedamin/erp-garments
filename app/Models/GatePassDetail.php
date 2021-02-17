@@ -12,6 +12,8 @@ class GatePassDetail extends Model
     use HasFactory;
     use CommonModelTrait;
 
+    protected $guarded = [];
+
     public function gate_pass()
     {
         return $this->belongsTo(GatePass::class);
