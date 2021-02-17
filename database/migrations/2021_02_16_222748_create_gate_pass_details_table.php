@@ -19,7 +19,7 @@ class CreateGatePassDetailsTable extends Migration
             $table->text('description')->nullable();
             $table->enum('type', ['cash', 'credit', 'foc'])->index();
             $table->tinyInteger('quantity')->default(0);
-            $table->integer('unit_it');
+            $table->integer('unit_id');
             $table->boolean('is_returnable');
             $table->timestamps();
         });

@@ -42,7 +42,7 @@
                                                 <th>Style</th>
                                                 <th>Contact No</th>
                                                 <th>Driver Name</th>
-                                                <th>Vihical No</th>
+                                                <th>Vehicle No</th>
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
