@@ -24,8 +24,15 @@ use Inertia\Inertia;
 //    ]);
 //});
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function (){
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+
+    // Todo roles
+    Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'App\Http\Controllers\Admin'], function () {
+        Route::resource('gate-pass', 'GatePassController');
+    });
+
 });

@@ -11,7 +11,7 @@
         <nav class="navbar navbar-expand-xl navbar-dark fixed-top hk-navbar">
             <a id="navbar_toggle_btn" class="navbar-toggle-btn nav-link-hover" href="javascript:void(0);"><span class="feather-icon"><i data-feather="menu"></i></span></a>
             <a class="navbar-brand" href="dashboard.php">
-                <img class="brand-img d-inline-block w-190p" src="assets/dist/img/logo-dark.png" alt="brand" />
+                <img class="brand-img d-inline-block w-190p" src="/assets/dist/img/logo-dark.png" alt="brand" />
             </a>
             <ul class="navbar-nav hk-navbar-content">
                 <li class="nav-item">
@@ -26,7 +26,7 @@
                                 <div class="media">
                                     <div class="media-img-wrap">
                                         <div class="avatar avatar-sm">
-                                            <img src="assets/dist/img/avatar1.jpg" alt="user" class="avatar-img rounded-circle">
+                                            <img src="/assets/dist/img/avatar1.jpg" alt="user" class="avatar-img rounded-circle">
                                         </div>
                                     </div>
                                     <div class="media-body">
@@ -42,7 +42,7 @@
                                 <div class="media">
                                     <div class="media-img-wrap">
                                         <div class="avatar avatar-sm">
-                                            <img src="assets/dist/img/avatar2.jpg" alt="user" class="avatar-img rounded-circle">
+                                            <img src="/assets/dist/img/avatar2.jpg" alt="user" class="avatar-img rounded-circle">
                                         </div>
                                     </div>
                                     <div class="media-body">
@@ -115,7 +115,7 @@
                         <div class="media">
                             <div class="media-img-wrap">
                                 <div class="avatar">
-                                    <img src="assets/dist/img/avatar12.jpg" alt="user" class="avatar-img rounded-circle">
+                                    <img src="/assets/dist/img/avatar12.jpg" alt="user" class="avatar-img rounded-circle">
                                 </div>
                                 <span class="badge badge-success badge-indicator"></span>
                             </div>
@@ -184,7 +184,6 @@
         components: {
             Sidebar
         },
-
         data() {
             return {
                 //

@@ -83,7 +83,7 @@
 {{--        <script src="{{asset('assets/dist/js/init.js')}}"></script>--}}
 {{--        <script src="{{asset('assets/dist/js/dashboard-data.js')}}"></script>--}}
 
-
+a
     </head>
     <body class="font-sans antialiased">
     @inertia

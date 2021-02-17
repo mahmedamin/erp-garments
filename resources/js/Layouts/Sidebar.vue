@@ -32,7 +32,9 @@
                                         <a class="nav-link" href="#">Dabit Note</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="list-gatepass.php">Gate Pass</a>
+                                        <inertia-link  :href="route('admin.gate-pass.index')" class="nav-link">
+                                            Gate Pass
+                                        </inertia-link>
                                     </li>
                                 </ul>
                             </li>
