@@ -2485,7 +2485,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   computed: {
     errors: function errors() {
@@ -2628,13 +2627,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Layouts_Sidebar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Layouts/Sidebar */ "./resources/js/Layouts/Sidebar.vue");
 /* harmony import */ var _public_assets_dist_js_init__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../public/assets/dist/js/init */ "./public/assets/dist/js/init.js");
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -3187,6 +3179,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 var detail_structure = {
@@ -3201,22 +3194,22 @@ var detail_structure = {
     GatePassDetail: _Pages_Admin_GatePass_GatePassDetail__WEBPACK_IMPORTED_MODULE_1__.default,
     AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__.default
   },
-  props: ['departments', 'units', 'types', 'errors'],
+  props: ['departments', 'units', 'types', 'errors', 'gatePass'],
   data: function data() {
-    var details = [Object.assign({}, detail_structure)];
+    var form = this.gatePass ? this.gatePass : {
+      name: null,
+      style: null,
+      contact: null,
+      department_id: null,
+      purpose: null,
+      amount: null,
+      driver_name: null,
+      vehicle_number: null,
+      confirmation: false,
+      details: [Object.assign({}, detail_structure)]
+    };
     return {
-      form: this.$inertia.form({
-        name: null,
-        style: null,
-        contact: null,
-        department_id: null,
-        purpose: null,
-        amount: null,
-        driver_name: null,
-        vehicle_number: null,
-        confirmation: false,
-        details: details
-      })
+      form: this.$inertia.form(form)
     };
   },
   computed: {
@@ -3236,7 +3229,9 @@ var detail_structure = {
       this.form.details.splice(index, 1);
     },
     submit: function submit() {
-      this.form.post(this.route('admin.gate-pass.store'), {
+      this.form.put(this.route('admin.gate-pass.update', {
+        gate_pass: this.gatePass.id
+      }), {
         onFinish: function onFinish(response) {
           console.log('resp', response);
         }
@@ -3425,6 +3420,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -3464,13 +3461,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -28319,20 +28309,25 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _vm.hasErrors
-    ? _c("div", [
-        _c("div", { staticClass: "font-medium text-red-600" }, [
-          _vm._v("Whoops! Something went wrong.")
-        ]),
-        _vm._v(" "),
-        _c(
-          "ul",
-          { staticClass: "mt-3 list-disc list-inside text-sm text-red-600" },
-          _vm._l(_vm.errors, function(error, key) {
-            return _c("li", { key: key }, [_vm._v(_vm._s(error))])
-          }),
-          0
-        )
-      ])
+    ? _c(
+        "div",
+        {
+          staticClass: "alert alert-danger fade mb-0 mt-7 mx-14 show",
+          attrs: { role: "alert" }
+        },
+        [
+          _c("strong", [_vm._v("Whoops! Something went wrong.")]),
+          _vm._v(" "),
+          _c(
+            "ul",
+            { staticClass: "mt-3 list-disc list-inside text-sm text-red-600" },
+            _vm._l(_vm.errors, function(error, key) {
+              return _c("li", { key: key }, [_vm._v(_vm._s(error))])
+            }),
+            0
+          )
+        ]
+      )
     : _vm._e()
 }
 var staticRenderFns = []
@@ -28787,13 +28782,11 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _vm._m(11),
-      _vm._v(" "),
       _vm._t("default"),
       _vm._v(" "),
       _c("sidebar"),
       _vm._v(" "),
-      _vm._m(12)
+      _vm._m(11)
     ],
     2
   )
@@ -29275,53 +29268,6 @@ var staticRenderFns = [
         ])
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "form",
-      { staticClass: "navbar-search", attrs: { role: "search" } },
-      [
-        _c("div", { staticClass: "position-relative" }, [
-          _c(
-            "a",
-            {
-              staticClass: "navbar-search-icon",
-              attrs: { href: "javascript:void(0);" }
-            },
-            [
-              _c("span", { staticClass: "feather-icon" }, [
-                _c("i", { attrs: { "data-feather": "search" } })
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              type: "text",
-              name: "example-input1-group2",
-              placeholder: "Type here to Search"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "navbar-search-close",
-              attrs: { id: "navbar_search_close", href: "#" }
-            },
-            [
-              _c("span", { staticClass: "feather-icon" }, [
-                _c("i", { attrs: { "data-feather": "x" } })
-              ])
-            ]
-          )
-        ])
-      ]
-    )
   },
   function() {
     var _vm = this
@@ -29942,7 +29888,7 @@ var render = function() {
                 _c("i", { attrs: { "data-feather": "toggle-right" } })
               ])
             ]),
-            _vm._v("Add Gate Pass")
+            _vm._v(_vm._s(_vm.gatePass ? "Edit" : "Add") + " Gate Pass")
           ])
         ]),
         _vm._v(" "),
@@ -30874,13 +30820,31 @@ var render = function() {
                                 _vm._v(_vm._s(gatePass.vehical_number))
                               ]),
                               _vm._v(" "),
-                              _c("td", [
-                                _c(
-                                  "button",
-                                  { staticClass: "btn btn-info  btn-xs" },
-                                  [_vm._v("View")]
-                                )
-                              ])
+                              _c(
+                                "td",
+                                [
+                                  _c(
+                                    "inertia-link",
+                                    {
+                                      staticClass: "btn btn-info btn-xs",
+                                      attrs: {
+                                        href: _vm.route(
+                                          "admin.gate-pass.edit",
+                                          { gate_pass: gatePass.id }
+                                        )
+                                      }
+                                    },
+                                    [_vm._v("Edit")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    { staticClass: "btn btn-danger btn-xs" },
+                                    [_vm._v("Delete")]
+                                  )
+                                ],
+                                1
+                              )
                             ])
                           }),
                           0
@@ -30934,7 +30898,7 @@ var render = function() {
             "div",
             { staticClass: "col-xl-7 pa-0" },
             [
-              _c("jet-validation-errors", { staticClass: "mb-4" }),
+              _c("jet-validation-errors"),
               _vm._v(" "),
               _c("div", { staticClass: "auth-form-wrap py-xl-0 py-50" }, [
                 _c(
@@ -30943,23 +30907,6 @@ var render = function() {
                     staticClass: "auth-form w-xxl-55 w-xl-75 w-sm-90 w-xs-100"
                   },
                   [
-                    _vm.status
-                      ? _c(
-                          "div",
-                          {
-                            staticClass:
-                              "mb-4 font-medium text-sm text-green-600"
-                          },
-                          [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(_vm.status) +
-                                "\n                            "
-                            )
-                          ]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
                     _c(
                       "form",
                       {
@@ -31168,20 +31115,6 @@ var staticRenderFns = [
             staticClass: "brand-img w-245p",
             attrs: { src: "assets/dist/img/logo-dark.png", alt: "brand" }
           })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "btn-group btn-group-sm" }, [
-          _c(
-            "a",
-            { staticClass: "btn btn-outline-secondary", attrs: { href: "#" } },
-            [_vm._v("Help")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            { staticClass: "btn btn-outline-secondary", attrs: { href: "#" } },
-            [_vm._v("About Us")]
-          )
         ])
       ]
     )

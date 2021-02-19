@@ -13,10 +13,6 @@
                 <a class="d-flex auth-brand" href="#">
                     <img class="brand-img w-245p" src="assets/dist/img/logo-dark.png" alt="brand" />
                 </a>
-                <div class="btn-group btn-group-sm">
-                    <a href="#" class="btn btn-outline-secondary">Help</a>
-                    <a href="#" class="btn btn-outline-secondary">About Us</a>
-                </div>
             </header>
             <div class="container-fluid">
                 <div class="row">
@@ -43,12 +39,9 @@
                         </div>
                     </div>
                     <div class="col-xl-7 pa-0">
-                        <jet-validation-errors class="mb-4" />
+                        <jet-validation-errors />
                         <div class="auth-form-wrap py-xl-0 py-50">
                             <div class="auth-form w-xxl-55 w-xl-75 w-sm-90 w-xs-100">
-                                <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-                                    {{ status }}
-                                </div>
                                 <form @submit.prevent="submit">
                                     <h1 class="display-4 mb-10">Welcome Back :)</h1>
                                     <p class="mb-30">Sign in to your account and enjoy unlimited perks.</p>

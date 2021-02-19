@@ -15,7 +15,7 @@
                 <!-- Title -->
                 <div class="hk-pg-header">
                     <h4 class="hk-pg-title"><span class="pg-title-icon"><span class="feather-icon"><i
-                        data-feather="toggle-right"></i></span></span>Add Gate Pass</h4>
+                        data-feather="toggle-right"></i></span></span>{{ gatePass ? 'Edit' : 'Add' }} Gate Pass</h4>
                 </div>
                 <!-- /Title -->
 
@@ -110,7 +110,8 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <gate-pass-detail v-for="(detail, i) in form.details" :key="`item-${i}`" :iteration=i
+                                        <gate-pass-detail v-for="(detail, i) in form.details" :key="`item-${i}`"
+                                                          :iteration=i
                                                           :detail=detail :types=types :units=units :errors=errors
                                                           @removeHandler="removeDetail"
                                                           :showRemoveButton="(form.details.length>1 || i>0)"/>
@@ -194,25 +195,26 @@ export default {
         'departments',
         'units',
         'types',
-        'errors'
+        'errors',
+        'gatePass'
     ],
     data() {
-        let details = [
-            Object.assign({}, detail_structure)
-        ];
+        let form = this.gatePass ? this.gatePass : {
+            name: null,
+            style: null,
+            contact: null,
+            department_id: null,
+            purpose: null,
+            amount: null,
+            driver_name: null,
+            vehicle_number: null,
+            confirmation: false,
+            details: [
+                Object.assign({}, detail_structure)
+            ]
+        };
         return {
-            form: this.$inertia.form({
-                name: null,
-                style: null,
-                contact: null,
-                department_id: null,
-                purpose: null,
-                amount: null,
-                driver_name: null,
-                vehicle_number: null,
-                confirmation: false,
-                details
-            })
+            form: this.$inertia.form(form)
         }
     },
     computed: {
@@ -232,7 +234,7 @@ export default {
             this.form.details.splice(index, 1)
         },
         submit() {
-            this.form.post(this.route('admin.gate-pass.store'), {
+            this.form.put(this.route('admin.gate-pass.update', {gate_pass: this.gatePass.id}), {
                 onFinish: (response) => {
                     console.log('resp', response)
                 },
