@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\GatePass;
 use App\Models\GatePassDetail;
+use App\Models\PaymentType;
 use App\Models\Unit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -36,9 +37,9 @@ class GatePassController extends Controller
     {
         $units = Unit::select('id', 'name')->get();
         $departments = Department::select('id', 'name')->get();
-        $types = GatePassDetail::getPossibleEnumValues('type');
+        $paymentTypes = PaymentType::select('id', 'name')->get();
 
-        return Inertia::render('Admin/GatePass/GatePass', compact('units', 'departments', 'types'));
+        return Inertia::render('Admin/GatePass/GatePass', compact('units', 'departments', 'paymentTypes'));
     }
 
     /**

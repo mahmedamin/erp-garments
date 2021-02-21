@@ -3186,6 +3186,7 @@ var detail_structure = {
   description: null,
   type: null,
   quantity: null,
+  amount: null,
   unit_id: null,
   is_returnable: null
 };
@@ -3194,7 +3195,7 @@ var detail_structure = {
     GatePassDetail: _Pages_Admin_GatePass_GatePassDetail__WEBPACK_IMPORTED_MODULE_1__.default,
     AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__.default
   },
-  props: ['departments', 'units', 'types', 'errors', 'gatePass'],
+  props: ['departments', 'units', 'paymentTypes', 'errors', 'gatePass'],
   data: function data() {
     var form = this.gatePass ? this.gatePass : {
       name: null,
@@ -3219,6 +3220,13 @@ var detail_structure = {
         total_quantity += parseInt(detail.quantity) || 0;
       });
       return total_quantity;
+    },
+    total_amount: function total_amount() {
+      var total_amount = 0;
+      this.form.details.forEach(function (detail) {
+        total_amount += parseInt(detail.amount) || 0;
+      });
+      return total_amount;
     }
   },
   methods: {
@@ -3233,7 +3241,7 @@ var detail_structure = {
         gate_pass: this.gatePass.id
       }), {
         onFinish: function onFinish(response) {
-          console.log('resp', response);
+          console.log('resp', response); // todo: remove this after notification work is done
         }
       });
     }
@@ -3298,13 +3306,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['detail', 'iteration', 'types', 'units', 'showRemoveButton', 'errors'],
+  props: ['detail', 'iteration', 'paymentTypes', 'units', 'showRemoveButton', 'errors'],
   data: function data() {
     return {
-      quantity: this.detail.quantity
+      quantity: this.detail.quantity,
+      amount: this.detail.amount
     };
   },
   methods: {
@@ -3326,6 +3333,10 @@ __webpack_require__.r(__webpack_exports__);
     quantity: function quantity(newVal, oldVal) {
       if (newVal < 0) this.quantity = 0;
       this.detail.quantity = this.quantity;
+    },
+    amount: function amount(newVal, oldVal) {
+      if (newVal < 0) this.amount = 0;
+      this.detail.amount = this.amount;
     }
   }
 });
@@ -3427,10 +3438,7 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__.default
   },
-  props: ['gatePasses'],
-  created: function created() {
-    console.log('ss', this.gatePasses);
-  }
+  props: ['gatePasses']
 });
 
 /***/ }),
@@ -5297,6 +5305,7 @@ function init() {
   chatApp();
   calendarApp();
   fmApp();
+  setHeightWidth();
   /*Disabled*/
 
   $(document).on("click", "a.disabled,a:disabled", function (e) {
@@ -28700,28 +28709,26 @@ var render = function() {
     "div",
     { staticClass: "hk-wrapper hk-vertical-nav" },
     [
-      _vm._m(0),
-      _vm._v(" "),
       _c(
         "nav",
         {
           staticClass: "navbar navbar-expand-xl navbar-dark fixed-top hk-navbar"
         },
         [
+          _vm._m(0),
+          _vm._v(" "),
           _vm._m(1),
           _vm._v(" "),
-          _vm._m(2),
-          _vm._v(" "),
           _c("ul", { staticClass: "navbar-nav hk-navbar-content" }, [
-            _vm._m(3),
+            _vm._m(2),
             _vm._v(" "),
-            _vm._m(4),
+            _vm._m(3),
             _vm._v(" "),
             _c(
               "li",
               { staticClass: "nav-item dropdown dropdown-authentication" },
               [
-                _vm._m(5),
+                _vm._m(4),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -28733,17 +28740,17 @@ var render = function() {
                     }
                   },
                   [
+                    _vm._m(5),
+                    _vm._v(" "),
                     _vm._m(6),
                     _vm._v(" "),
                     _vm._m(7),
                     _vm._v(" "),
                     _vm._m(8),
                     _vm._v(" "),
-                    _vm._m(9),
-                    _vm._v(" "),
                     _c("div", { staticClass: "dropdown-divider" }),
                     _vm._v(" "),
-                    _vm._m(10),
+                    _vm._m(9),
                     _vm._v(" "),
                     _c("div", { staticClass: "dropdown-divider" }),
                     _vm._v(" "),
@@ -28786,20 +28793,12 @@ var render = function() {
       _vm._v(" "),
       _c("sidebar"),
       _vm._v(" "),
-      _vm._m(11)
+      _vm._m(10)
     ],
     2
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "preloader-it" }, [
-      _c("div", { staticClass: "loader-pendulums" })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -30074,17 +30073,13 @@ var render = function() {
                                 }
                               },
                               _vm._l(_vm.departments, function(department) {
-                                return _c(
-                                  "option",
-                                  { domProps: { value: department.id } },
-                                  [
-                                    _vm._v(
-                                      "\n                                                        " +
-                                        _vm._s(department.name) +
-                                        "\n                                                    "
-                                    )
-                                  ]
-                                )
+                                return _c("option", [
+                                  _vm._v(
+                                    "\n                                                        " +
+                                      _vm._s(department.name) +
+                                      "\n                                                    "
+                                  )
+                                ])
                               }),
                               0
                             ),
@@ -30140,40 +30135,55 @@ var render = function() {
                         _vm._v(" "),
                         _c("div", { staticClass: "col-md-4" }, [
                           _c("div", { staticClass: "form-group" }, [
-                            _c("label", [_vm._v("Amount")]),
+                            _c("label", [_vm._v("Returnable/Non Returnable")]),
                             _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.form.amount,
-                                  expression: "form.amount"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                type: "text",
-                                placeholder: "Enter Amount"
-                              },
-                              domProps: { value: _vm.form.amount },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.form.is_returnable,
+                                    expression: "form.is_returnable"
                                   }
-                                  _vm.$set(
-                                    _vm.form,
-                                    "amount",
-                                    $event.target.value
-                                  )
+                                ],
+                                staticClass: "form-control",
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.form,
+                                      "is_returnable",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  }
                                 }
-                              }
-                            }),
+                              },
+                              [
+                                _c("option", { attrs: { value: "1" } }, [
+                                  _vm._v("Returnable")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "0" } }, [
+                                  _vm._v("NON Returnable")
+                                ])
+                              ]
+                            ),
                             _vm._v(" "),
-                            _vm.errors.amount
+                            _vm.errors.is_returnable
                               ? _c("span", { staticClass: "text-danger" }, [
-                                  _vm._v(_vm._s(_vm.errors.amount))
+                                  _vm._v(_vm._s(_vm.errors.is_returnable))
                                 ])
                               : _vm._e()
                           ])
@@ -30197,7 +30207,7 @@ var render = function() {
                           _c("th", { staticClass: "w-130p" }, [_vm._v("Unit")]),
                           _vm._v(" "),
                           _c("th", { staticClass: "w-190p" }, [
-                            _vm._v("Returnable/Non Returnable")
+                            _vm._v("Amount")
                           ]),
                           _vm._v(" "),
                           _c("th", { staticClass: "w-130p" }, [
@@ -30215,7 +30225,7 @@ var render = function() {
                               attrs: {
                                 iteration: i,
                                 detail: detail,
-                                types: _vm.types,
+                                "payment-types": _vm.paymentTypes,
                                 units: _vm.units,
                                 errors: _vm.errors,
                                 showRemoveButton:
@@ -30237,7 +30247,10 @@ var render = function() {
                             _vm._v(" "),
                             _c("td"),
                             _vm._v(" "),
-                            _c("td"),
+                            _c("td", [
+                              _vm._v("Total Amount: "),
+                              _c("span", [_vm._v(_vm._s(_vm.total_amount))])
+                            ]),
                             _vm._v(" "),
                             _c("td", [
                               _c(
@@ -30511,8 +30524,8 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.detail.type,
-              expression: "detail.type"
+              value: _vm.detail.payment_type_id,
+              expression: "detail.payment_type_id"
             }
           ],
           staticClass: "form-control",
@@ -30528,15 +30541,15 @@ var render = function() {
                 })
               _vm.$set(
                 _vm.detail,
-                "type",
+                "payment_type_id",
                 $event.target.multiple ? $$selectedVal : $$selectedVal[0]
               )
             }
           }
         },
-        _vm._l(_vm.types, function(type) {
-          return _c("option", { domProps: { value: type } }, [
-            _vm._v(_vm._s(type.toUpperCase()) + "\n            ")
+        _vm._l(_vm.paymentTypes, function(type) {
+          return _c("option", [
+            _vm._v(_vm._s(type.name.toUpperCase()) + "\n            ")
           ])
         }),
         0
@@ -30626,46 +30639,31 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("td", [
-      _c(
-        "select",
-        {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.detail.is_returnable,
-              expression: "detail.is_returnable"
-            }
-          ],
-          staticClass: "form-control",
-          on: {
-            change: function($event) {
-              var $$selectedVal = Array.prototype.filter
-                .call($event.target.options, function(o) {
-                  return o.selected
-                })
-                .map(function(o) {
-                  var val = "_value" in o ? o._value : o.value
-                  return val
-                })
-              _vm.$set(
-                _vm.detail,
-                "is_returnable",
-                $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-              )
-            }
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.amount,
+            expression: "amount"
           }
-        },
-        [
-          _c("option", { attrs: { value: "1" } }, [_vm._v("Returnable")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "0" } }, [_vm._v("NON Returnable")])
-        ]
-      ),
+        ],
+        staticClass: "form-control",
+        attrs: { type: "number" },
+        domProps: { value: _vm.amount },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.amount = $event.target.value
+          }
+        }
+      }),
       _vm._v(" "),
-      _vm.filterValidationError("is_returnable")
+      _vm.filterValidationError("amount")
         ? _c("span", { staticClass: "text-danger" }, [
-            _vm._v(_vm._s(_vm.filterValidationError("is_returnable")))
+            _vm._v(_vm._s(_vm.filterValidationError("amount")))
           ])
         : _vm._e()
     ]),
@@ -30679,7 +30677,7 @@ var render = function() {
               attrs: { type: "button" },
               on: {
                 click: function($event) {
-                  return _vm.remove("item-" + _vm.iteration)
+                  return _vm.remove(_vm.iteration)
                 }
               }
             },

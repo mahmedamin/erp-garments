@@ -17,10 +17,10 @@ class CreateGatePassDetailsTable extends Migration
             $table->id();
             $table->integer('gate_pass_id');
             $table->text('description')->nullable();
-            $table->enum('type', ['cash', 'credit', 'foc'])->index();
+            $table->integer('payment_type_id');
             $table->tinyInteger('quantity')->default(0);
             $table->integer('unit_id');
-            $table->boolean('is_returnable');
+            $table->decimal('amount',11,2)->nullable();
             $table->timestamps();
         });
     }

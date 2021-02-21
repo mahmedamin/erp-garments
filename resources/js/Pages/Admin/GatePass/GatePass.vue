@@ -65,8 +65,7 @@
                                                     <label>Department</label>
                                                     <select v-model="form.department_id"
                                                             class="form-control custom-select">
-                                                        <option v-for="department in departments"
-                                                                :value="department.id">
+                                                        <option v-for="department in departments">
                                                             {{ department.name }}
                                                         </option>
                                                     </select>
@@ -86,12 +85,13 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label>Amount</label>
-                                                    <input v-model="form.amount" type="text" class="form-control"
-                                                           placeholder="Enter Amount">
-                                                    <span v-if="errors.amount" class="text-danger">{{
-                                                            errors.amount
-                                                        }}</span>
+                                                    <label>Returnable/Non Returnable</label>
+                                                    <select v-model="form.is_returnable" class="form-control">
+                                                        <option value="1">Returnable</option>
+                                                        <option value="0">NON Returnable</option>
+                                                    </select>
+                                                    <span v-if="errors.is_returnable"
+                                                          class="text-danger">{{ errors.is_returnable }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -105,14 +105,14 @@
                                             <th class="w-15">Type</th>
                                             <th class="w-130p">Qty</th>
                                             <th class="w-130p">Unit</th>
-                                            <th class="w-190p">Returnable/Non Returnable</th>
+                                            <th class="w-190p">Amount</th>
                                             <th class="w-130p">Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <gate-pass-detail v-for="(detail, i) in form.details" :key="`item-${i}`"
                                                           :iteration=i
-                                                          :detail=detail :types=types :units=units :errors=errors
+                                                          :detail=detail :payment-types="paymentTypes" :units=units :errors=errors
                                                           @removeHandler="removeDetail"
                                                           :showRemoveButton="(form.details.length>1 || i>0)"/>
                                         <tr>
@@ -120,7 +120,7 @@
                                             <td></td>
                                             <td>Total Qty: <span>{{ total_quantity }}</span></td>
                                             <td></td>
-                                            <td></td>
+                                            <td>Total Amount: <span>{{ total_amount }}</span></td>
                                             <td>
                                                 <button @click="addDetail" type="button"
                                                         class="btn btn-primary btn-block">
@@ -186,6 +186,7 @@ const detail_structure = {
     description: null,
     type: null,
     quantity: null,
+    amount: null,
     unit_id: null,
     is_returnable: null
 };
@@ -194,7 +195,7 @@ export default {
     props: [
         'departments',
         'units',
-        'types',
+        'paymentTypes',
         'errors',
         'gatePass'
     ],
@@ -224,7 +225,14 @@ export default {
                 total_quantity += parseInt(detail.quantity) || 0;
             });
             return total_quantity;
-        }
+        },
+        total_amount: function () {
+            let total_amount = 0;
+            this.form.details.forEach(detail => {
+                total_amount += parseInt(detail.amount) || 0;
+            });
+            return total_amount;
+        },
     },
     methods: {
         addDetail() {
@@ -236,7 +244,7 @@ export default {
         submit() {
             this.form.put(this.route('admin.gate-pass.update', {gate_pass: this.gatePass.id}), {
                 onFinish: (response) => {
-                    console.log('resp', response)
+                    console.log('resp', response) // todo: remove this after notification work is done
                 },
             })
         }

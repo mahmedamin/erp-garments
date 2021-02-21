@@ -2,9 +2,9 @@
     <!-- HK Wrapper -->
     <div class="hk-wrapper hk-vertical-nav">
         <!-- Preloader -->
-        <div class="preloader-it">
-            <div class="loader-pendulums"></div>
-        </div>
+<!--        <div class="preloader-it">-->
+<!--            <div class="loader-pendulums"></div>-->
+<!--        </div>-->
         <!-- /Preloader -->
 
         <!-- Top Navbar -->

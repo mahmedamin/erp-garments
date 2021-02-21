@@ -6,9 +6,9 @@
                   class="text-danger">{{ filterValidationError('description') }}</span>
         </td>
         <td>
-            <select v-model="detail.type" class="form-control">
-                <option v-for="type in types" :value="type">{{
-                        type.toUpperCase()
+            <select v-model="detail.payment_type_id" class="form-control">
+                <option v-for="type in paymentTypes">{{
+                        type.name.toUpperCase()
                     }}
                 </option>
             </select>
@@ -29,16 +29,14 @@
                 }}</span>
         </td>
         <td>
-            <select v-model="detail.is_returnable" class="form-control">
-                <option value="1">Returnable</option>
-                <option value="0">NON Returnable</option>
-            </select>
-            <span v-if="filterValidationError('is_returnable')"
-                  class="text-danger">{{ filterValidationError('is_returnable') }}</span>
+            <input v-model="amount" type="number" class="form-control">
+            <span v-if="filterValidationError('amount')" class="text-danger">{{
+                    filterValidationError('amount')
+                }}</span>
         </td>
         <td>
             <button v-if="(showRemoveButton)" type="button"
-                    @click="remove(`item-${iteration}`)"
+                    @click="remove(iteration)"
                     class="btn btn-danger btn-block">Remove
             </button>
         </td>
@@ -47,10 +45,11 @@
 
 <script>
 export default {
-    props: ['detail', 'iteration', 'types', 'units', 'showRemoveButton', 'errors'],
+    props: ['detail', 'iteration', 'paymentTypes', 'units', 'showRemoveButton', 'errors'],
     data() {
         return {
-            quantity: this.detail.quantity
+            quantity: this.detail.quantity,
+            amount: this.detail.amount,
         }
     },
     methods: {
@@ -71,7 +70,12 @@ export default {
             if (newVal < 0)
                 this.quantity = 0;
             this.detail.quantity = this.quantity;
-        }
+        },
+        amount: function (newVal, oldVal) {
+            if (newVal < 0)
+                this.amount = 0;
+            this.detail.amount = this.amount;
+        },
     }
 }
 </script>

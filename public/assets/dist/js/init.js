@@ -18,6 +18,7 @@ function init(){
     chatApp();
     calendarApp();
     fmApp();
+    setHeightWidth();
     /*Disabled*/
     $(document).on("click", "a.disabled,a:disabled",function(e) {
         return false;

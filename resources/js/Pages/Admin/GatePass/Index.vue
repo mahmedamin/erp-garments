@@ -82,9 +82,6 @@ import AppLayout from "@/Layouts/AppLayout";
 export default {
     components: {AppLayout},
     props: ['gatePasses'],
-    created() {
-        console.log('ss', this.gatePasses)
-    }
 }
 </script>
 

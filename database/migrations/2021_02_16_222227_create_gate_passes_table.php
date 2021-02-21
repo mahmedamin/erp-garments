@@ -20,7 +20,7 @@ class CreateGatePassesTable extends Migration
             $table->string('contact', 50)->nullable();
             $table->integer('department_id');
             $table->string('purpose')->nullable();
-            $table->decimal('amount',11,2)->nullable();
+            $table->boolean('is_returnable');
             $table->string('driver_name', 50)->nullable();
             $table->string('vehicle_number', 50)->nullable();
             $table->timestamps();

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Department;
+use App\Models\PaymentType;
 use App\Models\Unit;
 use App\Models\User;
 use Carbon\Carbon;
@@ -42,6 +43,17 @@ class DummySeeder extends Seeder
         Unit::insert(collect([
             ['name' => 'KG'],
             ['name' => 'Piece'],
+        ])->map(function ($data) {
+            return array_merge($data, [
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]);
+        })->toArray());
+
+        PaymentType::insert(collect([
+            ['name' => 'cash'],
+            ['name' => 'credit'],
+            ['name' => 'foc'],
         ])->map(function ($data) {
             return array_merge($data, [
                 'created_at' => Carbon::now(),
