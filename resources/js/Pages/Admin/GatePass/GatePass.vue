@@ -65,7 +65,8 @@
                                                     <label>Department</label>
                                                     <select v-model="form.department_id"
                                                             class="form-control custom-select">
-                                                        <option v-for="department in departments">
+                                                        <option v-for="department in departments"
+                                                                :value="department.id">
                                                             {{ department.name }}
                                                         </option>
                                                     </select>
@@ -112,7 +113,8 @@
                                         <tbody>
                                         <gate-pass-detail v-for="(detail, i) in form.details" :key="`item-${i}`"
                                                           :iteration=i
-                                                          :detail=detail :payment-types="paymentTypes" :units=units :errors=errors
+                                                          :detail=detail :payment-types="paymentTypes" :units=units
+                                                          :errors=errors
                                                           @removeHandler="removeDetail"
                                                           :showRemoveButton="(form.details.length>1 || i>0)"/>
                                         <tr>
@@ -184,11 +186,10 @@ import GatePassDetail from "@/Pages/Admin/GatePass/GatePassDetail";
 
 const detail_structure = {
     description: null,
-    type: null,
+    payment_type_id: null,
     quantity: null,
     amount: null,
     unit_id: null,
-    is_returnable: null
 };
 export default {
     components: {GatePassDetail, AppLayout},
@@ -206,14 +207,14 @@ export default {
             contact: null,
             department_id: null,
             purpose: null,
-            amount: null,
+            is_returnable: null,
             driver_name: null,
             vehicle_number: null,
-            confirmation: false,
             details: [
                 Object.assign({}, detail_structure)
             ]
         };
+        this.gatePass.confirmation = false;
         return {
             form: this.$inertia.form(form)
         }
@@ -242,7 +243,15 @@ export default {
             this.form.details.splice(index, 1)
         },
         submit() {
-            this.form.put(this.route('admin.gate-pass.update', {gate_pass: this.gatePass.id}), {
+            let route, method;
+            if (this.gatePass) {
+                method = 'put';
+                route = this.route('admin.gate-pass.update', {gate_pass: this.gatePass.id});
+            } else {
+                method = 'post';
+                route = this.route('admin.gate-pass.store');
+            }
+            this.form[method](route, {
                 onFinish: (response) => {
                     console.log('resp', response) // todo: remove this after notification work is done
                 },

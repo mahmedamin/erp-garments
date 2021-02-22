@@ -43,28 +43,21 @@ class GatePassController extends Controller
     }
 
     /**
-     * @param array $data
-     * @return void|\Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validateGateway(Request $request)
+    protected function validator(Request $request)
     {
-        // todo here test $request->validate
-        $validator = Validator::make($request->all(), [
+        return Validator::make($request->all(), [
             'name' => 'required',
             'department_id' => 'required',
-            'amount' => 'numeric',
+            'is_returnable' => 'required',
             'confirmation' => 'accepted',
-            'details.*.type' => 'required',
+            'details.*.payment_type_id' => 'required',
             'details.*.unit_id' => 'required',
             'details.*.quantity' => 'required|numeric|min:1',
-            'details.*.is_returnable' => 'required',
+            'details.*.amount' => 'numeric',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput()->send();
-        }
     }
 
     /**
@@ -76,7 +69,7 @@ class GatePassController extends Controller
     public function store(Request $request)
     {
 
-        $this->validateGateway($request)->validate();
+        $this->validator($request)->validate();
 
         $gatePass = GatePass::create($request->only([
             'name',
@@ -84,7 +77,7 @@ class GatePassController extends Controller
             'contact',
             'department_id',
             'purpose',
-            'amount',
+            'is_returnable',
             'driver_name',
             'vehicle_number',
         ]));
@@ -94,10 +87,10 @@ class GatePassController extends Controller
             $details[] = [
                 'gate_pass_id' => $gatePass->id,
                 'description' => $detail['description'],
-                'type' => $detail['type'],
+                'payment_type_id' => $detail['payment_type_id'],
                 'quantity' => $detail['quantity'],
                 'unit_id' => $detail['unit_id'],
-                'is_returnable' => $detail['is_returnable'],
+                'amount' => $detail['amount'],
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ];
@@ -130,9 +123,9 @@ class GatePassController extends Controller
         $gatePass->load('details');
         $units = Unit::select('id', 'name')->get();
         $departments = Department::select('id', 'name')->get();
-        $types = GatePassDetail::getPossibleEnumValues('type');
+        $paymentTypes = PaymentType::select('id', 'name')->get();
 
-        return Inertia::render('Admin/GatePass/GatePass', compact('gatePass', 'units', 'departments', 'types'));
+        return Inertia::render('Admin/GatePass/GatePass', compact('gatePass', 'units', 'departments', 'paymentTypes'));
     }
 
     /**
@@ -144,16 +137,7 @@ class GatePassController extends Controller
      */
     public function update(Request $request, $gatewayId)
     {
-        $request->validate([
-            'name' => 'required',
-            'department_id' => 'required',
-            'amount' => 'numeric',
-            'confirmation' => 'accepted',
-            'details.*.type' => 'required',
-            'details.*.unit_id' => 'required',
-            'details.*.quantity' => 'required|numeric|min:1',
-            'details.*.is_returnable' => 'required',
-        ]);
+        $this->validator($request)->validate();
 
         GatePass::where('id', $gatewayId)->update($request->only([
             'name',
@@ -161,7 +145,7 @@ class GatePassController extends Controller
             'contact',
             'department_id',
             'purpose',
-            'amount',
+            'is_returnable',
             'driver_name',
             'vehicle_number',
         ]));
@@ -171,10 +155,10 @@ class GatePassController extends Controller
             $details[] = [
                 'gate_pass_id' => $gatewayId,
                 'description' => $detail['description'],
-                'type' => $detail['type'],
+                'payment_type_id' => $detail['payment_type_id'],
                 'quantity' => $detail['quantity'],
                 'unit_id' => $detail['unit_id'],
-                'is_returnable' => $detail['is_returnable'],
+                'amount' => $detail['amount'],
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ];
@@ -183,7 +167,7 @@ class GatePassController extends Controller
         GatePassDetail::where('gate_pass_id', $gatewayId)->delete();
         GatePassDetail::insert($details);
 
-        return Redirect::route('admin.gate-pass.index');
+        return Redirect::route('admin.gate-pass.index')->with('success', 'User created.');
     }
 
     /**

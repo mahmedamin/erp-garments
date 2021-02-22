@@ -1,6 +1,9 @@
 <template>
     <!-- HK Wrapper -->
     <div class="hk-wrapper hk-vertical-nav">
+        <div v-if="$page.flash" class="green">
+            {{ $page.flash.success }}
+        </div>
         <!-- Preloader -->
 <!--        <div class="preloader-it">-->
 <!--            <div class="loader-pendulums"></div>-->

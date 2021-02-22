@@ -54,7 +54,7 @@
                                                 <td>{{ gatePass.style }}</td>
                                                 <td>{{ gatePass.contact }}</td>
                                                 <td>{{ gatePass.driver_name }}</td>
-                                                <td>{{ gatePass.vehical_number }}</td>
+                                                <td>{{ gatePass.vehicle_number }}</td>
                                                 <td>
                                                     <inertia-link :href="route('admin.gate-pass.edit',{'gate_pass':gatePass.id})"
                                                        class="btn btn-info btn-xs">Edit</inertia-link>

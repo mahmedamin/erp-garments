@@ -7,12 +7,12 @@
         </td>
         <td>
             <select v-model="detail.payment_type_id" class="form-control">
-                <option v-for="type in paymentTypes">{{
-                        type.name.toUpperCase()
+                <option v-for="paymentType in paymentTypes" :value="paymentType.id">{{
+                        paymentType.name.toUpperCase()
                     }}
                 </option>
             </select>
-            <span v-if="filterValidationError('type')" class="text-danger">{{ filterValidationError('type') }}</span>
+            <span v-if="filterValidationError('payment_type_id')" class="text-danger">{{ filterValidationError('payment_type_id') }}</span>
         </td>
         <td>
             <input v-model="quantity" type="number" class="form-control">

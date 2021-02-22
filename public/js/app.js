@@ -2799,6 +2799,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3180,15 +3183,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 var detail_structure = {
   description: null,
-  type: null,
+  payment_type_id: null,
   quantity: null,
   amount: null,
-  unit_id: null,
-  is_returnable: null
+  unit_id: null
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -3203,12 +3207,12 @@ var detail_structure = {
       contact: null,
       department_id: null,
       purpose: null,
-      amount: null,
+      is_returnable: null,
       driver_name: null,
       vehicle_number: null,
-      confirmation: false,
       details: [Object.assign({}, detail_structure)]
     };
+    this.gatePass.confirmation = false;
     return {
       form: this.$inertia.form(form)
     };
@@ -3237,9 +3241,19 @@ var detail_structure = {
       this.form.details.splice(index, 1);
     },
     submit: function submit() {
-      this.form.put(this.route('admin.gate-pass.update', {
-        gate_pass: this.gatePass.id
-      }), {
+      var route, method;
+
+      if (this.gatePass) {
+        method = 'put';
+        route = this.route('admin.gate-pass.update', {
+          gate_pass: this.gatePass.id
+        });
+      } else {
+        method = 'post';
+        route = this.route('admin.gate-pass.store');
+      }
+
+      this.form[method](route, {
         onFinish: function onFinish(response) {
           console.log('resp', response); // todo: remove this after notification work is done
         }
@@ -28709,6 +28723,14 @@ var render = function() {
     "div",
     { staticClass: "hk-wrapper hk-vertical-nav" },
     [
+      _vm.$page.flash
+        ? _c("div", { staticClass: "green" }, [
+            _vm._v(
+              "\n            " + _vm._s(_vm.$page.flash.success) + "\n        "
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
       _c(
         "nav",
         {
@@ -30073,13 +30095,17 @@ var render = function() {
                                 }
                               },
                               _vm._l(_vm.departments, function(department) {
-                                return _c("option", [
-                                  _vm._v(
-                                    "\n                                                        " +
-                                      _vm._s(department.name) +
-                                      "\n                                                    "
-                                  )
-                                ])
+                                return _c(
+                                  "option",
+                                  { domProps: { value: department.id } },
+                                  [
+                                    _vm._v(
+                                      "\n                                                        " +
+                                        _vm._s(department.name) +
+                                        "\n                                                    "
+                                    )
+                                  ]
+                                )
                               }),
                               0
                             ),
@@ -30547,17 +30573,17 @@ var render = function() {
             }
           }
         },
-        _vm._l(_vm.paymentTypes, function(type) {
-          return _c("option", [
-            _vm._v(_vm._s(type.name.toUpperCase()) + "\n            ")
+        _vm._l(_vm.paymentTypes, function(paymentType) {
+          return _c("option", { domProps: { value: paymentType.id } }, [
+            _vm._v(_vm._s(paymentType.name.toUpperCase()) + "\n            ")
           ])
         }),
         0
       ),
       _vm._v(" "),
-      _vm.filterValidationError("type")
+      _vm.filterValidationError("payment_type_id")
         ? _c("span", { staticClass: "text-danger" }, [
-            _vm._v(_vm._s(_vm.filterValidationError("type")))
+            _vm._v(_vm._s(_vm.filterValidationError("payment_type_id")))
           ])
         : _vm._e()
     ]),
@@ -30815,7 +30841,7 @@ var render = function() {
                               _c("td", [_vm._v(_vm._s(gatePass.driver_name))]),
                               _vm._v(" "),
                               _c("td", [
-                                _vm._v(_vm._s(gatePass.vehical_number))
+                                _vm._v(_vm._s(gatePass.vehicle_number))
                               ]),
                               _vm._v(" "),
                               _c(
