@@ -167,7 +167,11 @@ class GatePassController extends Controller
         GatePassDetail::where('gate_pass_id', $gatewayId)->delete();
         GatePassDetail::insert($details);
 
-        return Redirect::route('admin.gate-pass.index')->with('success', 'User created.');
+        // todo: add responses with helpers
+        return Redirect::route('admin.gate-pass.index')->with('alert', [
+            'type' => 'success',
+            'message' => 'updated',
+        ]);
     }
 
     /**
